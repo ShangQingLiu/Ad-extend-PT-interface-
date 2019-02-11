@@ -4,7 +4,9 @@
   "plugins": ["react"],
   "rules": {
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "no-console": "off",
+    "no-undef": "off"
   },
   "globals": {
     "window": true,
