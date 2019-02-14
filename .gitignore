@@ -1,0 +1,4 @@
+.idea/
+server/models/
+server/node_modules/
+server/routes/

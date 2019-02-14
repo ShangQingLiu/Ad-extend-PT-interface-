@@ -8,14 +8,14 @@ inside of PC you need following package install.
 ## server
 For testing, inside the server/contorller using command ```node led.ctl.js COMX ``` X stands for your COM port which connet to the Arduino.
 
-##webpage
+## webpage
 To start the react project.
 using ```npm install``` inside the path ad-extend under the whole project.
 And using ```npm start``` to start the website on local:3000.
 
 In the frontier just click the color to make the counterpart light bulb switch on.
 
-##arduino
+## arduino
 First you need to load the serial test inside of Arduino as following.
 ```
    int redLed = 13;

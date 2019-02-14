@@ -1,5 +1,5 @@
 import React from 'react';
-import {Jumbotron, Button} from 'react-bootstrap';
+import {Jumbotron} from 'react-bootstrap';
 import Proptypes from 'prop-types';
 class MyNote extends React.Component{
     constructor(props){
@@ -8,13 +8,13 @@ class MyNote extends React.Component{
     render() {
         return(
             <Jumbotron>
-                <h1>Bluetooth!</h1>
+                <h1>Bluetooth control I2c</h1>
                 <p>
                     time:{this.props.time}
                 </p>
-                <p>
-                    <Button bsStyle="primary" onClick={this.handleCkick}>connect</Button>
-                </p>
+                {/*<p>*/}
+                    {/*<Button bsStyle="primary" onClick={this.handleCkick}>connect</Button>*/}
+                {/*</p>*/}
             </Jumbotron>
         );
     }
