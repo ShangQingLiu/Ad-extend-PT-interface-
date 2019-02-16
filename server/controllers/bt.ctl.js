@@ -41,25 +41,40 @@ function receiveData(data) {
 
 function connectToBT(data) {
     console.log("sending to serial: " + data);
+    // data.toString().split(",",4)[3]
     if(CONNECTED) {
-        if(data.toString().split(",",1)==="write_i2c"){
+        if(data.toString().split(",",1)[0]==="write_i2c"){
+            console.log("success");
+
             serial.write(Buffer.from(data, 'utf8'), function (err, bytesWritten) {
                 if (err) console.log(err);
             });
+            // serial.write(Buffer.from('@S'+data.toString().split(",",4)[1]+'@', 'utf8'), function (err, bytesWritten) {
+            //     if (err) console.log(err);
+            // });
+            // serial.write(Buffer.from('@R'+data.toString().split(",",4)[2]+'@', 'utf8'), function (err, bytesWritten) {
+            //     if (err) console.log(err);
+            // });
+            // serial.write(Buffer.from('@D'+data.toString().split(",",4)[3]+'@', 'utf8'), function (err, bytesWritten) {
+            //     if (err) console.log(err);
+            // });
 
             serial.on('data', function (data) {
                 console.log('Received: ' + data);
             });
         }
         else if(data.toString().split(",",1)[0]==='read_i2c'){
-            console.log("");
+            serial.write(Buffer.from(data, 'utf8'), function (err, bytesWritten) {
+                if (err) console.log(err);
+            });
+            serial.on('data', function (data) {
+                console.log('Received: ' + data);
+                connections[0].emit("receive_data", data);
+            });
         }
     }
     else{
         console.log("It's not connected to the device.");
-        if(data.toString().split(",",1)[0]==='read_i2c'){
-            console.log("read_test");
-        }
     }
 }
 
