@@ -18,5 +18,7 @@ To start the react project.
 using ```npm install``` inside the path ad-extend under the whole project.
 And using ```npm start``` to start the website on local:3000.
 
-In the frontier just click the color to make the counterpart light bulb switch on.
+## Using
+In the frontier send the command that you want to read or write the specific I2c devices.
+ 
 
