@@ -12,10 +12,12 @@ function receiveMessager(message){
     console.log(message);
     socket.emit("receive_data",message);
 }
-let getMessage =()=>{
+let getMessage =(This)=>{
    socket.on("receive_data",function (msg) {
       console.log(msg);
-      return msg;
+       var toChange = This.state.form;
+       toChange['receive_data'] = msg;
+       This.setState({form: toChange});
    })
 };
 export { subscribeToTimer ,messager, getMessage, receiveMessager};

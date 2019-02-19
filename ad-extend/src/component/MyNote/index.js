@@ -2,26 +2,28 @@ import React from 'react';
 import {Jumbotron} from 'react-bootstrap';
 import Proptypes from 'prop-types';
 class MyNote extends React.Component{
+    proptypes={
+        time:Proptypes.string
+    };
     constructor(props){
         super(props);
     }
     render() {
+        const {time, hasmargin} = this.props;
         return(
             <Jumbotron>
-                <h1>Bluetooth control I2c</h1>
+                <h1>Bluetooth control I2c
+                <br/>
+                <div style={hasmargin?({marginLeft:'8rem'}):({})}>
                 <p>
-                    time:{this.props.time}
+                    time:{time}
                 </p>
-                {/*<p>*/}
-                    {/*<Button bsStyle="primary" onClick={this.handleCkick}>connect</Button>*/}
-                {/*</p>*/}
+                </div>
+                </h1>
             </Jumbotron>
         );
     }
 }
-MyNote.Proptypes={
-  time:Proptypes.string
-};
 
 
 export default MyNote;
