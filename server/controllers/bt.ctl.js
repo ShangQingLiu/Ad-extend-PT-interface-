@@ -31,7 +31,7 @@ function receiveData(data) {
     console.log("receiveData");
     if(CONNECTED) {
         if(data.toString().split(",",1)[0]==='read_i2c'){
-            connections[0].emit("receive_data", "receive_data test");
+            connections[connections.length-1].emit("receive_data", "receive_data test");
         }
     }
     else{
@@ -39,28 +39,42 @@ function receiveData(data) {
     }
 }
 
+const fakeTableData = ()=>{
+    var result = '';
+    for(var i=0;i<256;i++){
+      result =  result.concat((i).toString(16)+',');
+    }
+    return result;
+};
+
 function connectToBT(data) {
     console.log("sending to serial: " + data);
     // data.toString().split(",",4)[3]
+    // connections[connections.length-1].emit("receive_all_data", fakeTableData());
     if(CONNECTED) {
         if(data.toString().split(",",1)[0]==="write_i2c"){
-            console.log("success");
+            console.log("write_i2c");
 
             serial.write(Buffer.from(data, 'utf8'), function (err, bytesWritten) {
                 if (err) console.log(err);
             });
-            // serial.write(Buffer.from('@S'+data.toString().split(",",4)[1]+'@', 'utf8'), function (err, bytesWritten) {
-            //     if (err) console.log(err);
-            // });
-            // serial.write(Buffer.from('@R'+data.toString().split(",",4)[2]+'@', 'utf8'), function (err, bytesWritten) {
-            //     if (err) console.log(err);
-            // });
-            // serial.write(Buffer.from('@D'+data.toString().split(",",4)[3]+'@', 'utf8'), function (err, bytesWritten) {
-            //     if (err) console.log(err);
-            // });
 
             serial.on('data', function (data) {
                 console.log('Received: ' + data);
+            });
+        }
+        else if(data.toString().split(",",1)[0]==="read_all"){
+            console.log("read_all");
+
+            serial.write(Buffer.from(data, 'utf8'), function (err, bytesWritten) {
+                if (err) console.log(err);
+            });
+
+            serial.on('data', function (data) {
+                console.log('Received: ' + data);
+                if(data){
+                    connections[connections.length-1].emit("receive_all_data", data);
+                }
             });
         }
         else if(data.toString().split(",",1)[0]==='read_i2c'){
@@ -69,7 +83,9 @@ function connectToBT(data) {
             });
             serial.on('data', function (data) {
                 console.log('Received: ' + data);
-                connections[0].emit("receive_data", data);
+                if(data){
+                    connections[connections.length-1].emit("receive_data", data);
+                }
             });
         }
     }

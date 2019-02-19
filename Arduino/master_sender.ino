@@ -15,6 +15,7 @@ String comdata = "";
 uint8_t DA_low, DA_high;
 int data_length = 0;
 char receive_char;
+String receive_string = "";
 
 String getValue(String data, char separator, int index)
 {
@@ -126,12 +127,26 @@ void loop()
     Wire.beginTransmission(SLAVE_ADDRESS);
     Wire.write(REG_ADDRESS);
     Wire.endTransmission(false);
-    Wire.requestFrom(REG_ADDRESS, 1, true);
-      if(Wire.available()){  
-            receive_char = Wire.read();           //data                       
+    Wire.requestFrom(SLAVE_ADDRESS, 1, true);
+      if(Wire.available()){
+            receive_char = Wire.read();           //data
       }
       Serial.println("receive_char");
       Serial.println(receive_char);
   }
+  if (getValue(comdata, ',', 0) == "read_all"){
+    Wire.beginTransmission(SLAVE_ADDRESS);
+    Wire.write(0);
+    Wire.endTransmission(false);
+    Wire.requestFrom(SLAVE_ADDRESS, 256, true);
+      if(Wire.available()){
+            while(Wire.available()){
+              receive_string += Wire.read();           //data
+            }
+      }
+      Serial.println("receive_string");
+      Serial.println(receive_string);
+  }
   comdata = "";
   }
+

@@ -10,6 +10,13 @@ import {messager, getMessage} from '../api'
 class Write_i2c extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            form: {
+                slave_address: '',
+                reg_address: '',
+                data: '',
+            }
+        }
     }
 
     handleClick = message => {
@@ -22,7 +29,7 @@ class Write_i2c extends React.Component{
                 + "," + this.state.form.read_length);
             getMessage(this);
         } else {
-            messager(message);
+            console.log("Write_i2c error")
         }
     };
 
@@ -46,7 +53,7 @@ class Write_i2c extends React.Component{
                             placeholder="Slave-address(e.g. 5A)"
                             aria-label="slave_address"
                             aria-describedby="slave_address"
-                            onChange={this.handleClick.bind(this, 'slave_address')}
+                            onChange={this.handleChange.bind(this, 'slave_address')}
                         />
                         <FormControl
                             placeholder="Reg-address(e.g. FF)"

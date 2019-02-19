@@ -1,27 +1,38 @@
 import React from 'react';
-import {
-    Col,
-    Panel,
-    Alert,
-    Button
-} from 'react-bootstrap';
+import Col from 'react-bootstrap/lib/Col'
+import Panel from 'react-bootstrap/lib/Panel'
+import Alert from 'react-bootstrap/lib/Alert'
+import Button from 'react-bootstrap/lib/Button'
 import ReadTable from './ReadTable'
-import {messager} from '../api'
-class Readall extends React.Component{
-    constructor(props){
+import initReceiveAllData from '../constants/initData'
+import {messager, getMessage} from '../api'
+
+class Readall extends React.Component {
+    constructor(props) {
         super(props);
+        this.state = {
+            form: {
+                receive_all_data:initReceiveAllData
+            }
+        }
     }
+
+
     handleClick = message => {
         console.log("handle");
         if (message.toString() === 'read_all') {
-            messager("read_all," + this.state.form.slave_address + "," + this.state.form.reg_address
-                + "," + this.state.form.data);
+            for(var i=0;i<5;i++){
+                messager("read_all," + "50" + "," + i.toString()
+                    + "," + this.state.form.data);
+                getMessage(this, i);
+            }
         } else {
             messager(message);
         }
     };
+
     render() {
-        return(
+        return (
             <Col xs={12} md={12}>
                 <Panel bsStyle="danger">
                     <Panel.Heading>
@@ -31,11 +42,11 @@ class Readall extends React.Component{
                         {/*<h3>Received Data</h3>*/}
                         <Alert varient="success">
                             <div>
-                                <ReadTable/>
+                                <ReadTable receiveData={this.state.form.receive_all_data}/>
                             </div>
                         </Alert>
                         <Button onClick={() => this.handleClick('read_all')}>
-                           Read All
+                            Read All
                         </Button>
                     </Panel.Body>
                 </Panel>
@@ -43,4 +54,5 @@ class Readall extends React.Component{
         );
     }
 }
+
 export default Readall;

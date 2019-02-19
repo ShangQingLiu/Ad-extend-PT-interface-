@@ -11,19 +11,24 @@ import {messager, getMessage}  from '../api'
 class Read_i2c extends React.Component{
     constructor(props){
         super(props);
+        this.state = {
+            form: {
+                read_slave_address: '',
+                read_reg_address: '',
+                read_length: '',
+                receive_data:'receive_data'
+            }
+        }
     }
 
     handleClick = message => {
         console.log("handle");
-        if (message.toString() === 'write_i2c') {
-            messager("write_i2c," + this.state.form.slave_address + "," + this.state.form.reg_address
-                + "," + this.state.form.data);
-        } else if (message.toString() === 'read_i2c') {
+        if (message.toString() === 'read_i2c') {
             messager("read_i2c," + this.state.form.read_slave_address + "," + this.state.form.read_reg_address
                 + "," + this.state.form.read_length);
-            getMessage(this);
+            getMessage(this, 0);
         } else {
-            messager(message);
+            console.log("error_read_i2c");
         }
     };
 
@@ -31,6 +36,15 @@ class Read_i2c extends React.Component{
         var toChange = this.state.form;
         toChange[change] = event.target.value;
         this.setState({form: toChange});
+    }
+    decimalToHexString(number)
+    {
+        if (number < 0)
+        {
+            number = 0xFFFFFFFF + number + 1;
+        }
+
+        return number.toString(16).toUpperCase();
     }
     render() {
        return(
@@ -69,6 +83,7 @@ class Read_i2c extends React.Component{
                            </Button>
                        </ButtonGroup>
                    </Panel.Body>
+                   <p>{"0x"+this.decimalToHexString(parseInt(this.state.form.receive_data))}</p>
                </Panel>
            </Col>
        );
