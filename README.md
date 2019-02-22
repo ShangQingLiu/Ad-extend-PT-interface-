@@ -20,16 +20,13 @@ Base on bluetooth to control Arduino for making communication with I2C device.
 the Zip file. 
 
 #### Project structure
+```
 ------Ad-extend-PT-interface-
-
     |-----ad-extend
-
     |-----Arduino
-
     |-----server
-    
         |-----controllers
-
+```
 ### frontier
 In the command line, go under the ad-extend file as ```cd Ad-extend-PT-interface-/ad-extend```
 and run ```npm install``` then do ```npm start``` It will automatically start the frontier on **localhost:3000**
