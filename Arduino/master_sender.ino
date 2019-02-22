@@ -3,7 +3,7 @@
 int redLed = 13;
 int greenLed = 12;
 int blueLed = 11;
-int SLAVE_ADDRESS = 0x01;
+int SLAVE_ADDRESS = 0xA0;
 String SA_val = "";
 uint8_t SA_low, SA_high;
 int REG_ADDRESS = 0x03;
@@ -14,7 +14,7 @@ int data;
 String comdata = "";
 uint8_t DA_low, DA_high;
 int data_length = 0;
-char receive_char;
+String receive_char;
 String receive_string = "";
 
 String getValue(String data, char separator, int index)
@@ -88,13 +88,14 @@ void loop()
   }
   if (getValue(comdata, ',', 0) == "write_i2c")
   {
+
     SA_val = getValue(comdata, ',', 1);
     RA_val = getValue(comdata, ',', 2);
     comdata = getValue(comdata, ',', 3);
 
-    // SA_high = SA_val[0];
-    // SA_low = SA_val[1];
-    // SLAVE_ADDRESS = hexChar2Dec(SA_high,SA_low)
+     SA_high = SA_val[0];
+     SA_low = SA_val[1];
+     SLAVE_ADDRESS = hexChar2Dec(SA_high,SA_low);
 
     RA_high = RA_val[0];
     RA_low = RA_val[1];
@@ -111,42 +112,54 @@ void loop()
   }
   if (getValue(comdata, ',', 0) == "read_i2c")
   {
+    receive_char = "";
+  
     SA_val = getValue(comdata, ',', 1);
     RA_val = getValue(comdata, ',', 2);
     data_length = getValue(comdata, ',', 3).toInt();
 
-    // SA_high = SA_val[0];
-    // SA_low = SA_val[1];
-    // SLAVE_ADDRESS = hexChar2Dec(SA_high,SA_low)
+     SA_high = SA_val[0];
+     SA_low = SA_val[1];
+     SLAVE_ADDRESS = hexChar2Dec(SA_high,SA_low);
 
     RA_high = RA_val[0];
     RA_low = RA_val[1];
     REG_ADDRESS = hexChar2Dec(RA_high, RA_low);
 
-
     Wire.beginTransmission(SLAVE_ADDRESS);
     Wire.write(REG_ADDRESS);
     Wire.endTransmission(false);
     Wire.requestFrom(SLAVE_ADDRESS, 1, true);
-      if(Wire.available()){
-            receive_char = Wire.read();           //data
-      }
-      Serial.println("receive_char");
-      Serial.println(receive_char);
+    if (Wire.available())
+    {
+      while(Wire.available()){
+         receive_char += Wire.read(); //data
+        }
+     
+    }
+
+    Serial.println(receive_char);
   }
-  if (getValue(comdata, ',', 0) == "read_all"){
-    Wire.beginTransmission(SLAVE_ADDRESS);
-    Wire.write(0);
-    Wire.endTransmission(false);
-    Wire.requestFrom(SLAVE_ADDRESS, 256, true);
-      if(Wire.available()){
-            while(Wire.available()){
-              receive_string += Wire.read();           //data
-            }
+  if (getValue(comdata, ',', 0) == "read_all")
+  {
+ 
+    receive_string="";
+      Wire.beginTransmission(SLAVE_ADDRESS);
+      Wire.write(REG_ADDRESS);
+      Wire.endTransmission(false);
+      Wire.requestFrom(SLAVE_ADDRESS, 1, true);
+      if (Wire.available())
+      {
+        while (Wire.available())
+        {
+          receive_string += Wire.read(); //data
+          
+        }
+        
       }
-      Serial.println("receive_string");
-      Serial.println(receive_string);
+    
+ Serial.println(receive_string);
+    
   }
   comdata = "";
-  }
-
+}
