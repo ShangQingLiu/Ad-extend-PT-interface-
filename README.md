@@ -21,9 +21,13 @@ the Zip file.
 
 #### Project structure
 ------Ad-extend-PT-interface-
+
     |-----ad-extend
+
     |-----Arduino
+
     |-----server
+    
         |-----controllers
 
 ### frontier
